@@ -7,7 +7,7 @@ int main()
     int i = 1; //Cycle counters for first building
     int k = 1;
     int l = 1;
-    if (numOfFloors > 0 and numOfFloors < 50) //Data enter verification
+    if (numOfFloors > 0 and numOfFloors <= 50) //Data enter verification
     {
     printf("\nFirst building \n \n"); //First building script
     do {
@@ -52,6 +52,6 @@ int main()
     printf("*");
     }
     else { //Information for incorrect enter data
-        printf("\nEnter data from 0 to 50!\n");
+        printf("\nEnter data from 1 to 50!\n");
     };
 }
