@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <cstring>
 int main(){
 
     int userNum = 0; //Enter number
     int genNum = 0; //Generate number
-    char selector[3] = {0}; //Selection counter
-    char letterCheck = 0;
+    char selector[] = {0}; //Selection array
 
     for (;;) {
         srand(time(NULL));
@@ -26,40 +25,43 @@ int main(){
             break;
             };
 
-            scanf("%d%c", &userNum, &letterCheck);
-
-            if (!letterCheck) {
-                printf("You mast enter the number");
-            };
+            if(scanf("%d",&userNum)!=1) { // Check for enter data
+                printf("\nEnter data is wrong\n");
+                char tail[] = {0}; //Cat char into tail for scanf
+                scanf("%s", tail);
+                continue;
+            }
 
             if (userNum < 0) {
                 printf("\nOops, your number is negative!\n");
                 continue;
-            };
+            }
             if (userNum > genNum) {
                 printf("\nBigger!\n");
-            };
+            }
             if (userNum < genNum) {
                 printf("\nSmaller!\n");
-            };
+            }
             if (userNum == genNum) {
                 printf("\nYou Win\n");
                 break;
-            };
+            }
         };
         printf("\n++++GAME OVER++++\n");
 
-        printf("\nDo you want to continue? No or Yes: ");
+        printf("\nDo you want to continue? No or Yes: "); //Choice game again or no
         scanf("%s", selector);
 
-        if (selector[0] == 'N', selector[1] == 'o') {
+        char positAnsw[] = {"Yes"};
+        char negatAnsw[] = {"No"};
+
+        if (strcmp(negatAnsw, selector) == 0) {
             return 0;
         }
-        else if (selector[0] == 'Y', selector[1] == 'e', selector[2] == 's') {
-            continue;
+        else if (strcmp(positAnsw, selector) == 0) {
         }
         else {
-            printf("Your answer is wrong");
+            printf("Your answer has bad format");
             return 0;
         }
     };

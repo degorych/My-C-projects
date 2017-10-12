@@ -4,3 +4,9 @@
 	<stdlib.h>
 	<time.h>
 
+1507796185 source:c:\users\dimon\desktop\guess number program\main.cpp
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<cstring>
+
