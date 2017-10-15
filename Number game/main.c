@@ -3,16 +3,19 @@
 #include <time.h>
 int main(){
 
-    int userNum = 0; //Enter number
-    int genNum = 0; //Generate number
-    char selector[50] = {0}; //Selection array
+    /* --- Enter data, generate number and selection array --- */
+    int userNum = 0; 
+    int genNum = 0; 
+    char selector[50] = {0}; 
 
     for (;;) {
+        /* --- Generate number --- */
         srand(time(NULL));
         genNum = rand() % 10;
 
         int i = 0;
         for (i = 0; i < 3; i++) {
+            /* --- Choose variant --- */
             switch (i) {
                 case 0:
                     printf("\nEnter positive number: ");
@@ -25,21 +28,26 @@ int main(){
                 break;
             };
 
-            if(scanf("%d",&userNum)!=1) { // Check for enter data
+            /* --- Check for enter data --- */
+            if(scanf("%d",&userNum)!=1) {
                 printf("\nEnter data is wrong\n");
                 scanf("%*[^\n]");
                 continue;
-            }
+            };
+            
             if (userNum < 0) {
                 printf("\nOops, your number is negative!\n");
                 continue;
             }
+            
             if (userNum > genNum) {
                 printf("\nBigger!\n");
             }
+            
             if (userNum < genNum) {
                 printf("\nSmaller!\n");
             }
+            
             if (userNum == genNum) {
                 printf("\nYou Win\n");
                 break;
@@ -47,7 +55,8 @@ int main(){
         };
         printf("\n++++GAME OVER++++\n");
 
-        printf("\nDo you want to continue? No or Yes: "); //Choice game again or no
+        /* --- Choice game again or no --- */
+        rintf("\nDo you want to continue? No or Yes: ");
         scanf("%s", selector);
 
         char positAnsw[] = {"Yes"};
@@ -63,4 +72,4 @@ int main(){
             return 0;
         }
     }
-}
+};
