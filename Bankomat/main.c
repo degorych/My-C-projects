@@ -16,10 +16,20 @@ int main() {
 
     /* --- Arrays --- */
     int account[5000];
-    int systemPin[5001];
+    int systemPin[5000];
     char userPin[5];
 
-    for (i = 0; i < 5000; i++) {
+    /* --- Constants --- */
+    const int ADMIN_PIN = 9999;
+    const int NUMBER_OF_ACCOUNT = 5000;
+
+    const int START_NUMBER_ASCII = 47;
+    const int END_NUMBER_ASCII = 58;
+    const int CHAR_TO_INT = 48;
+
+    const int NUM_CHAR_IN_PIN = 4;
+
+    for (i = 0; i < NUMBER_OF_ACCOUNT; i++) {
 
         /* --- Generate money --- */
         account[i] = i*2 + 1;
@@ -27,9 +37,6 @@ int main() {
         /* --- Generate pull pin --- */
         systemPin[i] = 2*i;
     }
-
-    /* --- Generate admin pin --- */
-        systemPin[5000] = 9999;
 
     for (;;) { // If enter data is incorrect endless loop
         for (i = 0; i < 4; i++) {
@@ -50,7 +57,7 @@ int main() {
 
             /* --- Check for enter data to number of chars --- */
             scanf("%s", userPin);
-            if (userPin[3] != NULL && userPin[4] == NULL) {
+            if (userPin[NUM_CHAR_IN_PIN - 1] != NULL && userPin[NUM_CHAR_IN_PIN] == NULL) {
             }
             else {
                 printf("\nEnter data is wrong\n");
@@ -59,33 +66,33 @@ int main() {
             }
 
             /* --- Check for enter data to incorrect and transform char into pin --- */
-            for (l = 0; l < 4; l++) {
-                if (userPin[l] > 47 && userPin[l] < 58) {
-                    for (l = 0, k = 1000, pin = 0; l < 4, k >=1; l++, k = k/10) { // If user enter correct pin transform array userPin to int pin
-                        pin = pin + (userPin[l] - 48)*k;
+            for (l = 0; l < NUM_CHAR_IN_PIN; l++) {
+                if (userPin[l] > START_NUMBER_ASCII && userPin[l] < END_NUMBER_ASCII) {
+                    for (l = 0, k = 1000, pin = 0; l < NUM_CHAR_IN_PIN, k >=1; l++, k = k/10) { // If user enter correct pin transform array userPin to int pin
+                        pin = pin + (userPin[l] - CHAR_TO_INT)*k;
                     }
                 }
                 else {
                     printf("\nEnter data is wrong\n");
-                    pin = 0;
+                    pin = -1;
                     scanf("%*[^\n]");
                     break;
                 }
             }
 
             /* --- Admin verification --- */
-            if (pin == systemPin[5000]) {
+            if (pin == ADMIN_PIN) {
                 printf("\nYou login as admin.\n\nSelect one of the following operations:\n1. View balance all accounts\n2. Zero out account\n\nYour answer is: ");
                 scanf("%d", &choiceSelector);
 
                 switch (choiceSelector) {
                     case 1:
-                        for (l = 0; l < 5000; l++) {
+                        for (l = 0; l < NUMBER_OF_ACCOUNT; l++) {
                             printf("\n%d", account[l]);
                         }
                         break;
                     case 2:
-                        for (l = 0; l < 5000; l++) {
+                        for (l = 0; l < NUMBER_OF_ACCOUNT; l++) {
                             account[l] = 0;
                             printf("\n%d", account[l]);
                         }
@@ -98,7 +105,7 @@ int main() {
             }
 
             /* --- Check pin --- */
-            for (k = 0; k < 5000; k++) {
+            for (k = 0; k < NUMBER_OF_ACCOUNT; k++) {
                 if (systemPin[k] == pin) {
                     printf("\nYour Pin code is correct!");
                     printf("\nSelect one of the following operations:\n1. View balance.\n2. Deposit account.\n3. Withdraw funds.\n\nYour answer is: ");
