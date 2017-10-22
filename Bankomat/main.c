@@ -5,9 +5,10 @@ int main() {
 
     /* --- Variables --- */
     int pin = 0;
-    int choiceSelector = 0;
+    int choiceOperationSelector = 0;
     int depocitAccount = 0;
     int withdrawAccount = 0;
+    char yesNoSelector = 0;
 
     /* --- Counters --- */
     int i = 0;
@@ -65,7 +66,7 @@ int main() {
                 break;
             }
 
-            /* --- Check for enter data to incorrect and transform char into pin --- */
+            /* --- Check for enter data to incorrect and transform char array to pin variable --- */
             for (l = 0; l < NUM_CHAR_IN_PIN; l++) {
                 if (userPin[l] > START_NUMBER_ASCII && userPin[l] < END_NUMBER_ASCII) {
                     for (l = 0, k = 1000, pin = 0; l < NUM_CHAR_IN_PIN, k >=1; l++, k = k/10) { // If user enter correct pin transform array userPin to int pin
@@ -73,63 +74,107 @@ int main() {
                     }
                 }
                 else {
-                    printf("\nEnter data is wrong\n");
                     pin = -1;
-                    scanf("%*[^\n]");
-                    break;
                 }
             }
+            if (pin == -1) {
+                printf("\nEnter data is wrong\n");
+                for (k = 0; k < NUM_CHAR_IN_PIN + 1; k++) {
+                    userPin[k] = 0;
+                }
+                scanf("%*[^\n]");
+                break;
+            }
+
 
             /* --- Admin verification --- */
             if (pin == ADMIN_PIN) {
-                printf("\nYou login as admin.\n\nSelect one of the following operations:\n1. View balance all accounts\n2. Zero out account\n\nYour answer is: ");
-                scanf("%d", &choiceSelector);
+                for (;;) {
+                    printf("\nYou login as admin.\n\nSelect one of the following operations:\n1. View balance all accounts\n2. Zero out account\n\nYour answer is: ");
+                    scanf("%d", &choiceOperationSelector);
 
-                switch (choiceSelector) {
-                    case 1:
-                        for (l = 0; l < NUMBER_OF_ACCOUNT; l++) {
-                            printf("\n%d", account[l]);
-                        }
-                        break;
-                    case 2:
-                        for (l = 0; l < NUMBER_OF_ACCOUNT; l++) {
-                            account[l] = 0;
-                            printf("\n%d", account[l]);
-                        }
-                        break;
-                    default:
-                        printf("\nYour answer is incorrect");
-                        return 0;
+                    switch (choiceOperationSelector) {
+                        case 1:
+                            for (l = 0; l < NUMBER_OF_ACCOUNT; l++) {
+                                printf("\n%d", account[l]);
+                            }
+                            break;
+                        case 2:
+                            for (l = 0; l < NUMBER_OF_ACCOUNT; l++) {
+                                account[l] = 0;
+                                printf("\n%d", account[l]);
+                            }
+                            break;
+                        default:
+                            printf("\nYour answer is incorrect. Try again.");
+                            scanf("%*[^\n]");
+                            break;
+                    }
+
+                    choiceOperationSelector = 0;
+                    scanf("%*[^\n]");
+
+                    printf("\nContinue operations? Y/N: ");
+                    scanf(" %c", &yesNoSelector);
+
+                    switch (yesNoSelector) {
+                        case 'Y':
+                            break;
+                        case 'N':
+                            return 0;
+                        default:
+                            printf("\nYour answer is incorrect");
+                            choiceOperationSelector = 0;
+                            scanf("%*[^\n]");
+                            break;
+                    }
                 }
-                return 0;
             }
 
             /* --- Check pin --- */
             for (k = 0; k < NUMBER_OF_ACCOUNT; k++) {
                 if (systemPin[k] == pin) {
-                    printf("\nYour Pin code is correct!");
-                    printf("\nSelect one of the following operations:\n1. View balance.\n2. Deposit account.\n3. Withdraw funds.\n\nYour answer is: ");
-                    scanf("%d", &choiceSelector);
+                    for (;;) {
+                        printf("\nYour Pin is correct!\nSelect one of the following operations:\n1. View balance.\n2. Deposit account.\n3. Withdraw funds.\n\nYour answer is: ");
+                        scanf("%d", &choiceOperationSelector);
 
-                    switch (choiceSelector) {
-                        case 1:
-                            printf("\nYour balance is: %d", account[k]);
-                            return 0;
-                        case 2:
-                            printf("\nEnter amount you wish to deposit: ");
-                            scanf("%d", &depocitAccount);
-                            account[k] = account[k] + depocitAccount;
-                            printf("\nOperation is success. Your balance is: %d", account[k]);
-                            return 0;
-                        case 3:
-                            printf("\nEnter amount you wish to withdraw: ");
-                            scanf("%d", &withdrawAccount);
-                            account[k] = account[k] - withdrawAccount;
-                            printf("\nOperation is success. Your balance is: %d", account[k]);
-                            return 0;
-                        default:
-                            printf("\nYour answer is incorrect");
-                            return 0;
+                        switch (choiceOperationSelector) {
+                            case 1:
+                                printf("\nYour balance is: %d", account[k]);
+                                break;
+                            case 2:
+                                printf("\nEnter amount you wish to deposit: ");
+                                scanf("%d", &depocitAccount);
+                                account[k] = account[k] + depocitAccount;
+                                printf("\nOperation is success. Your balance is: %d", account[k]);
+                                break;
+                            case 3:
+                                printf("\nEnter amount you wish to withdraw: ");
+                                scanf("%d", &withdrawAccount);
+                                account[k] = account[k] - withdrawAccount;
+                                printf("\nOperation is success. Your balance is: %d", account[k]);
+                                break;
+                            default:
+                                printf("\nYour answer is incorrect. Try again.");
+                                scanf("%*[^\n]");
+                                break;
+                        }
+                        choiceOperationSelector = 0;
+                        scanf("%*[^\n]");
+
+                        printf("\nContinue operations? Y/N: ");
+                        scanf(" %c", &yesNoSelector);
+                        switch (yesNoSelector) {
+                            case 'Y':
+                                break;
+                            case 'N':
+                                return 0;
+                            default:
+                                printf("\nYour answer is incorrect");
+                                choiceOperationSelector = 0;
+                                scanf("%*[^\n]");
+                                break;
+                        }
                     }
                 }
             }
