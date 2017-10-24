@@ -16,11 +16,6 @@ int main() {
     int k = 0;
     int l = 0;
 
-    /* --- Arrays --- */
-    int account[5000];
-    int systemPin[5000];
-    char userPin[5];
-
     /* --- Constants --- */
     const int ADMIN_PIN = 9999;
     const int NUMBER_OF_ACCOUNT = 5000;
@@ -29,6 +24,11 @@ int main() {
     const int END_NUMBER_ASCII = 57; // '9' into ASCII
 
     const int NUM_CHAR_IN_PIN = 4;
+    
+    /* --- Arrays --- */
+    int account[NUMBER_OF_ACCOUNT];
+    int systemPin[NUMBER_OF_ACCOUNT];
+    char userPin[NUM_CHAR_IN_PIN + 1];
 
     for (i = 0; i < NUMBER_OF_ACCOUNT; i++) {
 
