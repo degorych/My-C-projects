@@ -4,11 +4,12 @@
 int main() {
 
     /* --- Variables --- */
-    int pin = 0;
-    int choiceOperationSelector = 0;
-    int depocitAccount = 0;
-    int withdrawAccount = 0;
-    char yesNoSelector = 0;
+    int pin = 0; // Pin from userPin array
+    int choiceOperationSelector = 0; // Choice which operation program mast do
+    int depocitAccount = 0; // Increment user account to ... $
+    int withdrawAccount = 0; // Decrement user account to ... $
+    char yesNoSelector = 0; // Continue working or exit to program
+    int powerOfTen = 1; // Number for transform userPin array to int pin (10 in power of char-1 in pin)
 
     /* --- Counters --- */
     int i = 0;
@@ -24,9 +25,8 @@ int main() {
     const int ADMIN_PIN = 9999;
     const int NUMBER_OF_ACCOUNT = 5000;
 
-    const int START_NUMBER_ASCII = 47;
-    const int END_NUMBER_ASCII = 58;
-    const int CHAR_TO_INT = 48;
+    const int START_NUMBER_ASCII = 48; // '0' into ASCII
+    const int END_NUMBER_ASCII = 57; // '9' into ASCII
 
     const int NUM_CHAR_IN_PIN = 4;
 
@@ -68,9 +68,16 @@ int main() {
 
             /* --- Check for enter data to incorrect and transform char array to pin variable --- */
             for (l = 0; l < NUM_CHAR_IN_PIN; l++) {
-                if (userPin[l] > START_NUMBER_ASCII && userPin[l] < END_NUMBER_ASCII) {
-                    for (l = 0, k = 1000, pin = 0; l < NUM_CHAR_IN_PIN, k >=1; l++, k = k/10) { // If user enter correct pin transform array userPin to int pin
-                        pin = pin + (userPin[l] - CHAR_TO_INT)*k;
+
+                /* --- Calculate int powerOfTen to transform array userPin to int pin --- */
+                for (k = 1, powerOfTen = 1; k < NUM_CHAR_IN_PIN; k++) {
+                    powerOfTen = powerOfTen*10;
+                }
+
+                /* --- Transform array userPin to int pin --- */
+                if (userPin[l] >= START_NUMBER_ASCII && userPin[l] <= END_NUMBER_ASCII) {
+                    for (l = 0, k = powerOfTen, pin = 0; l < NUM_CHAR_IN_PIN, k >=1; l++, k = k/10) { // If user enter correct pin transform array userPin to int pin
+                        pin = pin + (userPin[l] - START_NUMBER_ASCII)*k;
                     }
                 }
                 else {
