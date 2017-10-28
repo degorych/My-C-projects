@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define FIRST_TRY 0
+#define SECOND_TRY 1
+#define THIRD_TRY 2
+#define BREAK_PROGRAM 3
+#define SHOW_ALL_ACCOUNT 1
+#define MAKE_ZERO_ACCOUNT 2
+#define SHOW_BALANS 1
+#define DEPOSIT_ACCOUNT 2
+#define WITHDRAW_FUNDS 3
+
 int main() {
 
     /* --- Variables --- */
@@ -24,7 +34,7 @@ int main() {
     const int END_NUMBER_ASCII = 57; // '9' into ASCII
 
     const int NUM_CHAR_IN_PIN = 4;
-    
+
     /* --- Arrays --- */
     int account[NUMBER_OF_ACCOUNT];
     int systemPin[NUMBER_OF_ACCOUNT];
@@ -42,16 +52,16 @@ int main() {
     for (;;) { // If enter data is incorrect endless loop
         for (i = 0; i < 4; i++) {
             switch (i) {
-                case 0:
+                case FIRST_TRY:
                     printf("\nEnter pin: ");
                     break;
-                case 1:
+                case SECOND_TRY:
                     printf("\nYour pin is wrong. You have 2 tries: ");
                     break;
-                case 2:
+                case THIRD_TRY:
                     printf("\nYour pin is wrong. You have 1 tries: ");
                     break;
-                case 3:
+                case BREAK_PROGRAM:
                     printf("\nEnter valid pin.");
                     return 0;
             }
@@ -97,16 +107,16 @@ int main() {
             /* --- Admin verification --- */
             if (pin == ADMIN_PIN) {
                 for (;;) {
-                    printf("\nYou login as admin.\n\nSelect one of the following operations:\n1. View balance all accounts\n2. Zero out account\n\nYour answer is: ");
+                    printf("\nYou login as admin.\n\nSelect one of the following operations:\nView balance all accounts - 1\nZero out account - 2\n\nYour answer is: ");
                     scanf("%d", &choiceOperationSelector);
 
                     switch (choiceOperationSelector) {
-                        case 1:
+                        case SHOW_ALL_ACCOUNT:
                             for (l = 0; l < NUMBER_OF_ACCOUNT; l++) {
                                 printf("\n%d", account[l]);
                             }
                             break;
-                        case 2:
+                        case MAKE_ZERO_ACCOUNT:
                             for (l = 0; l < NUMBER_OF_ACCOUNT; l++) {
                                 account[l] = 0;
                                 printf("\n%d", account[l]);
@@ -142,20 +152,20 @@ int main() {
             for (k = 0; k < NUMBER_OF_ACCOUNT; k++) {
                 if (systemPin[k] == pin) {
                     for (;;) {
-                        printf("\nYour Pin is correct!\nSelect one of the following operations:\n1. View balance.\n2. Deposit account.\n3. Withdraw funds.\n\nYour answer is: ");
+                        printf("\nYour Pin is correct!\nSelect one of the following operations:\nView balance - 1.\nDeposit account - 2.\nWithdraw funds - 3.\n\nYour answer is: ");
                         scanf("%d", &choiceOperationSelector);
 
                         switch (choiceOperationSelector) {
-                            case 1:
+                            case SHOW_BALANS:
                                 printf("\nYour balance is: %d", account[k]);
                                 break;
-                            case 2:
+                            case DEPOSIT_ACCOUNT:
                                 printf("\nEnter amount you wish to deposit: ");
                                 scanf("%d", &depocitAccount);
                                 account[k] = account[k] + depocitAccount;
                                 printf("\nOperation is success. Your balance is: %d", account[k]);
                                 break;
-                            case 3:
+                            case WITHDRAW_FUNDS:
                                 printf("\nEnter amount you wish to withdraw: ");
                                 scanf("%d", &withdrawAccount);
                                 account[k] = account[k] - withdrawAccount;
