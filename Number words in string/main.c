@@ -12,9 +12,6 @@ int main(){
 
     const int MAX_LENS_OF_STRING = 100000;
 
-    /* --- Letters array --- */
-    char letterArray[NUMBER_OF_LETTERS_IN_ALPHABET];
-
     /* --- Counters --- */
     int i = 0;
     int k = 0;
@@ -34,28 +31,14 @@ int main(){
         foundLettersIndex[i] = -1;
     }
 
-    /* --- Create Array of capitals and lowercases letters --- */
-    for (i = 0, k = START_CAPITAL_LETTER_ASCII, l = START_LOWERCASE_LETTER_ASCII; i < 52, k <= END_CAPITAL_LETTER_ASCII, l <= END_LOWERCASE_LETTER_ASCII; i++) {
-        if (i < 26) {
-            letterArray[i] = k;
-            k++;
-        }
-        else {
-            letterArray[i] = l;
-            l++;
-        }
-    }
-
     printf("Enter string here: ");
     fgets(userString, MAX_LENS_OF_STRING, stdin);
 
     /* --- Fill foundLettersIndex indexes of letters --- */
     for (i = 0, l = 0; i < MAX_LENS_OF_STRING; i++) {
-        for (k = 0; k < NUMBER_OF_LETTERS_IN_ALPHABET; k++) {
-            if (userString[i] == letterArray[k]) {
-                foundLettersIndex[l] = i;
-                l++;
-            }
+        if ((userString[i] >= START_CAPITAL_LETTER_ASCII && userString[i] <= END_CAPITAL_LETTER_ASCII)||(userString[i] >= START_LOWERCASE_LETTER_ASCII && userString[i] <= END_LOWERCASE_LETTER_ASCII)) {
+            foundLettersIndex[l] = i;
+            l++;
         }
     }
 
