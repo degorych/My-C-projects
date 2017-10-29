@@ -76,29 +76,26 @@ int main() {
                 break;
             }
 
+            /* --- Create power of ten number for transform userPin array to pin number --- */
+            for (l = 1; l < NUM_CHAR_IN_PIN; l++) {
+                powerOfTen = powerOfTen*10;
+            }
+
             /* --- Check for enter data to incorrect and transform char array to pin variable --- */
-            for (l = 0; l < NUM_CHAR_IN_PIN; l++) {
-
-                /* --- Calculate int powerOfTen to transform array userPin to int pin --- */
-                for (k = 1, powerOfTen = 1; k < NUM_CHAR_IN_PIN; k++) {
-                    powerOfTen = powerOfTen*10;
-                }
-
-                /* --- Transform array userPin to int pin --- */
+            for (l = 0, pin = 0, powerOfTen = 1000; l < NUM_CHAR_IN_PIN; l++) {
                 if (userPin[l] >= START_NUMBER_ASCII && userPin[l] <= END_NUMBER_ASCII) {
-                    for (l = 0, k = powerOfTen, pin = 0; l < NUM_CHAR_IN_PIN, k >=1; l++, k = k/10) { // If user enter correct pin transform array userPin to int pin
-                        pin = pin + (userPin[l] - START_NUMBER_ASCII)*k;
-                    }
+                    pin = pin + (userPin[l] - START_NUMBER_ASCII)*powerOfTen;
                 }
                 else {
                     pin = -1;
+                    for (k = 0; k < NUM_CHAR_IN_PIN + 1; k++) {
+                    userPin[k] = 0;
+                    }
                 }
+                powerOfTen = powerOfTen/10;
             }
             if (pin == -1) {
                 printf("\nEnter data is wrong\n");
-                for (k = 0; k < NUM_CHAR_IN_PIN + 1; k++) {
-                    userPin[k] = 0;
-                }
                 scanf("%*[^\n]");
                 break;
             }
