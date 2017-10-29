@@ -14,8 +14,14 @@ int main(){
     const int START_LOWERCASE_LETTER_ASCII = 97;
     const int END_LOWERCASE_LETTER_ASCII = 122;
 
+    const int LETTER_INDEX = 0;
+    const int REPETITION_INDEX = 1;
+    const int ARRAY_SECOND_INDEX = 2;
+    const int CAPITAL_LETTER = 0;
+    const int LOWERCASE_LETTER = 1;
+
     /* --- Array for conversion capital letter to lowercase letter --- */
-    char capitalToLowercase[NUM_CHAR_INTO_ALPHABET][2];
+    char capitalToLowercase[NUM_CHAR_INTO_ALPHABET][ARRAY_SECOND_INDEX];
 
     /* --- Counters --- */
     int i = 0;
@@ -45,9 +51,9 @@ int main(){
     }
 
     /* --- Assign array for conversion capital letter to lowercase letter --- */
-    for (i = 0, k = 0, l = START_CAPITAL_LETTER_ASCII, m = START_LOWERCASE_LETTER_ASCII; i < NUM_CHAR_INTO_ALPHABET; i++, l++, m++) {
-        capitalToLowercase[i][k] = l;
-        capitalToLowercase[i][k+1] = m;
+    for (i = 0, l = START_CAPITAL_LETTER_ASCII, m = START_LOWERCASE_LETTER_ASCII; i < NUM_CHAR_INTO_ALPHABET; i++, l++, m++) {
+        capitalToLowercase[i][CAPITAL_LETTER] = l;
+        capitalToLowercase[i][LOWERCASE_LETTER] = m;
     }
 
     printf("Enter some string: ");
@@ -55,9 +61,9 @@ int main(){
 
     /* --- Conversion capital letter to lowercase letter --- */
     for (i = 0; i < MAX_LENS_USERSTRING; i++) {
-        for (k = 0, l = 0; k < NUM_CHAR_INTO_ALPHABET; k++) {
-            if (pUserString[i] == capitalToLowercase[k][l]) {
-                pUserString[i] = capitalToLowercase[k][l+1];
+        for (k = 0; k < NUM_CHAR_INTO_ALPHABET; k++) {
+            if (pUserString[i] == capitalToLowercase[k][CAPITAL_LETTER]) {
+                pUserString[i] = capitalToLowercase[k][LOWERCASE_LETTER];
             }
         }
     }
@@ -65,15 +71,15 @@ int main(){
     /* --- Assign letter from usersString to numberOfCharRepetitions and calculate repetitions --- */
     for (i = 0; i < MAX_LENS_USERSTRING; i++) {
         if (pUserString[i] >= START_LOWERCASE_LETTER_ASCII && pUserString[i] <= END_LOWERCASE_LETTER_ASCII) {
-            for (k = 0, l = 0; k < MAX_LENS_USERSTRING; k++) {
+            for (k = 0; k < MAX_LENS_USERSTRING; k++) {
 
-                if (pUserString[i] == pNumberOfCharRepetitions[k][l]) {
-                    pNumberOfCharRepetitions[k][l+1] = pNumberOfCharRepetitions[k][l+1] + 1;
+                if (pUserString[i] == pNumberOfCharRepetitions[k][LETTER_INDEX]) {
+                    pNumberOfCharRepetitions[k][REPETITION_INDEX] = pNumberOfCharRepetitions[k][REPETITION_INDEX] + 1;
                     break;
                 }
-                else if (pUserString[i] != pNumberOfCharRepetitions[k][l] && pNumberOfCharRepetitions[k][l] == 0) {
-                    pNumberOfCharRepetitions[k][l] = pUserString[i];
-                    pNumberOfCharRepetitions[k][l+1] = 1;
+                else if (pUserString[i] != pNumberOfCharRepetitions[k][LETTER_INDEX] && pNumberOfCharRepetitions[k][LETTER_INDEX] == 0) {
+                    pNumberOfCharRepetitions[k][LETTER_INDEX] = pUserString[i];
+                    pNumberOfCharRepetitions[k][REPETITION_INDEX] = 1;
                     break;
                 }
             }
@@ -91,25 +97,25 @@ int main(){
     /* --- Sort numberOfCharRepetitions array --- */
     for (k = 0; k < NUM_CHAR_INTO_ALPHABET; k++) {
         for (i = 0; i < NUM_CHAR_INTO_ALPHABET; i++) {
-            if (pNumberOfCharRepetitions[i][1] < pNumberOfCharRepetitions[i+1][1]) {
-                smallSwapVariableChar = pNumberOfCharRepetitions[i][0];
-                bigSwapVariableChar = pNumberOfCharRepetitions[i+1][0];
-                smallSwapVariableNum = pNumberOfCharRepetitions[i][1];
-                bigSwapVariableNum = pNumberOfCharRepetitions[i+1][1];
+            if (pNumberOfCharRepetitions[i][REPETITION_INDEX] < pNumberOfCharRepetitions[i+1][REPETITION_INDEX]) {
+                smallSwapVariableChar = pNumberOfCharRepetitions[i][LETTER_INDEX];
+                bigSwapVariableChar = pNumberOfCharRepetitions[i+1][LETTER_INDEX];
+                smallSwapVariableNum = pNumberOfCharRepetitions[i][REPETITION_INDEX];
+                bigSwapVariableNum = pNumberOfCharRepetitions[i+1][REPETITION_INDEX];
 
-                pNumberOfCharRepetitions[i][0] = bigSwapVariableChar;
-                pNumberOfCharRepetitions[i][1] = bigSwapVariableNum;
-                pNumberOfCharRepetitions[i+1][0] = smallSwapVariableChar;
-                pNumberOfCharRepetitions[i+1][1] = smallSwapVariableNum;
+                pNumberOfCharRepetitions[i][LETTER_INDEX] = bigSwapVariableChar;
+                pNumberOfCharRepetitions[i][REPETITION_INDEX] = bigSwapVariableNum;
+                pNumberOfCharRepetitions[i+1][LETTER_INDEX] = smallSwapVariableChar;
+                pNumberOfCharRepetitions[i+1][REPETITION_INDEX] = smallSwapVariableNum;
             }
         }
     }
 
     /* --- Print numberOfCharRepetitions array --- */
     for (i = 0; i < NUM_CHAR_INTO_ALPHABET; i++) {
-            if (pNumberOfCharRepetitions[i][0] != NULL){
-                printf("\n %c", pNumberOfCharRepetitions[i][0]);
-                printf(" - %d", pNumberOfCharRepetitions[i][1]);
+            if (pNumberOfCharRepetitions[i][LETTER_INDEX] != NULL){
+                printf("\n %c", pNumberOfCharRepetitions[i][LETTER_INDEX]);
+                printf(" - %d", pNumberOfCharRepetitions[i][REPETITION_INDEX]);
             }
     }
 
