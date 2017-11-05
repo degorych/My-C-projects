@@ -2,127 +2,164 @@
 #include <stdlib.h>
 #include <malloc.h>
 
-int main(){
-
-    /* --- Constants --- */
-    const int MAX_LENS_USERSTRING = 100000;
-    const int NUMBEROFCHARREPETITIONS_SECOND_INDEX = 2;
-
-    const int NUM_CHAR_INTO_ALPHABET = 27;
-    const int START_CAPITAL_LETTER_ASCII = 65;
-    const int END_CAPITAL_LETTER_ASCII = 90;
-    const int START_LOWERCASE_LETTER_ASCII = 97;
-    const int END_LOWERCASE_LETTER_ASCII = 122;
-
-    const int LETTER_INDEX = 0;
-    const int REPETITION_INDEX = 1;
-    const int ARRAY_SECOND_INDEX = 2;
-    const int CAPITAL_LETTER = 0;
-    const int LOWERCASE_LETTER = 1;
-
-    /* --- Array for conversion capital letter to lowercase letter --- */
-    char capitalToLowercase[NUM_CHAR_INTO_ALPHABET][ARRAY_SECOND_INDEX];
-
-    /* --- Counters --- */
+void fillArray (char *pointer, int lens, int value) {
     int i = 0;
-    int k = 0;
-    int l = 0;
-    int m = 0;
-
-    /* --- Arrays pointers  --- */
-    char* pUserString;
-    char** pNumberOfCharRepetitions;
-
-    pUserString = (char*)malloc(MAX_LENS_USERSTRING * sizeof(char)); // Create memory for pUserString[i]
-
-    /* --- Fill userString array "0" elements --- */
-    for (i = 0; i < MAX_LENS_USERSTRING; i++) {
-        pUserString[i] = 0;
+    for (i = 0; i < lens; i++) {
+        pointer[i] = value;
     }
+}
 
-    pNumberOfCharRepetitions = (char**)malloc(MAX_LENS_USERSTRING * sizeof(char*)); //Create memory for pNumberOfCharRepetitions[i]
-
-    /* --- Create memory for pNumberOfCharRepetitions[i][k], fill numberOfCharRepetitions array "0" elements --- */
-    for (i = 0; i < MAX_LENS_USERSTRING; i++) {
-        pNumberOfCharRepetitions[i] = (char*)malloc(NUMBEROFCHARREPETITIONS_SECOND_INDEX * sizeof(char));
-        for (k = 0; k < NUMBEROFCHARREPETITIONS_SECOND_INDEX; k++){
-            pNumberOfCharRepetitions[i][k] = 0;
+void fillMulDimArray (char **pointer, int lensRow, int lensCol, int value) {
+    int i, k = 0;
+    for (i = 0; i < lensRow; i++) {
+        for (k = 0; k < lensCol; k++) {
+            pointer[i][k] = value;
         }
     }
+}
 
-    /* --- Assign array for conversion capital letter to lowercase letter --- */
-    for (i = 0, l = START_CAPITAL_LETTER_ASCII, m = START_LOWERCASE_LETTER_ASCII; i < NUM_CHAR_INTO_ALPHABET; i++, l++, m++) {
-        capitalToLowercase[i][CAPITAL_LETTER] = l;
-        capitalToLowercase[i][LOWERCASE_LETTER] = m;
+char **multidimensionalArray (int row, int column) {
+    char** array = (char**)malloc (row * sizeof(char*));
+    int i = 0;
+    for (i = 0; i < row; i++ ) {
+        array[i] = malloc (column * sizeof(char));
     }
+    return array;
+}
 
-    printf("Enter some string: ");
-    fgets(pUserString, MAX_LENS_USERSTRING, stdin);
+/* --- Constants --- */
+const int MAX_LENS_USERSTRING = 100000;
+const int NUM_CHAR_INTO_ALPHABET = 27;
 
-    /* --- Conversion capital letter to lowercase letter --- */
-    for (i = 0; i < MAX_LENS_USERSTRING; i++) {
-        for (k = 0; k < NUM_CHAR_INTO_ALPHABET; k++) {
-            if (pUserString[i] == capitalToLowercase[k][CAPITAL_LETTER]) {
-                pUserString[i] = capitalToLowercase[k][LOWERCASE_LETTER];
+const int START_CAPITAL_LETTER_ASCII = 65;
+const int START_LOWERCASE_LETTER_ASCII = 97;
+const int END_LOWERCASE_LETTER_ASCII = 122;
+
+const int NUMBEROFCHARREPETITIONS_SECOND_INDEX = 2;
+const int LETTERSARRAY_SECOND_INDEX = 2;
+const int LETTER_INDEX = 0;
+const int REPETITION_INDEX = 1;
+
+void capitalAndLowercaseLetterArray (int column, char (*letterArray)[column], int row) {
+    int i, k, l, m = 0;
+
+    for (i = 0, k = 0, l = START_CAPITAL_LETTER_ASCII, m = START_LOWERCASE_LETTER_ASCII; i < row; i++, l++, m++) {
+        letterArray[i][k] = l;
+        letterArray[i][k+1] = m;
+    }
+}
+
+void conversionCapToLow (char* userArray, int capAndLowLetterArSecondIndex, char (*capToLow)[capAndLowLetterArSecondIndex], int lensUserArray, int capAndLowLetterArFirstIndex) {
+    int i, k, l = 0;
+    for (i = 0; i < lensUserArray; i++) {
+        for (k = 0; k < capAndLowLetterArFirstIndex; k++) {
+            if (userArray[i] == capToLow[k][l]) {
+                userArray[i] = capToLow[k][l+1];
             }
         }
     }
+}
 
-    /* --- Assign letter from usersString to numberOfCharRepetitions and calculate repetitions --- */
-    for (i = 0; i < MAX_LENS_USERSTRING; i++) {
-        if (pUserString[i] >= START_LOWERCASE_LETTER_ASCII && pUserString[i] <= END_LOWERCASE_LETTER_ASCII) {
-            for (k = 0; k < MAX_LENS_USERSTRING; k++) {
+void calcRepetition (char* userString, char** repetition, int lens) {
+    int i, k = 0;
 
-                if (pUserString[i] == pNumberOfCharRepetitions[k][LETTER_INDEX]) {
-                    pNumberOfCharRepetitions[k][REPETITION_INDEX] = pNumberOfCharRepetitions[k][REPETITION_INDEX] + 1;
+    for (i = 0; i < lens; i++) {
+        if (userString[i] >= START_LOWERCASE_LETTER_ASCII && userString[i] <= END_LOWERCASE_LETTER_ASCII) {
+            for (k = 0; k < lens; k++) {
+                if (userString[i] == repetition[k][LETTER_INDEX]) {
+                    repetition[k][REPETITION_INDEX] = repetition[k][REPETITION_INDEX] + 1;
                     break;
                 }
-                else if (pUserString[i] != pNumberOfCharRepetitions[k][LETTER_INDEX] && pNumberOfCharRepetitions[k][LETTER_INDEX] == 0) {
-                    pNumberOfCharRepetitions[k][LETTER_INDEX] = pUserString[i];
-                    pNumberOfCharRepetitions[k][REPETITION_INDEX] = 1;
+                else if (userString[i] != repetition[k][LETTER_INDEX] && repetition[k][LETTER_INDEX] == 0) {
+                    repetition[k][LETTER_INDEX] = userString[i];
+                    repetition[k][REPETITION_INDEX] = 1;
                     break;
                 }
             }
         }
     }
+    free(userString);
+}
 
-    free(pUserString);
+void sortLetters (char** sortArray, int lens) {
+    int i, k = 0;
 
-    /* --- Variables for swap--- */
     char smallSwapVariableChar = '0';
     char bigSwapVariableChar = '0';
     char smallSwapVariableNum = '0';
     char bigSwapVariableNum = '0';
 
-    /* --- Sort numberOfCharRepetitions array --- */
-    for (k = 0; k < NUM_CHAR_INTO_ALPHABET; k++) {
-        for (i = 0; i < NUM_CHAR_INTO_ALPHABET; i++) {
-            if (pNumberOfCharRepetitions[i][REPETITION_INDEX] < pNumberOfCharRepetitions[i+1][REPETITION_INDEX]) {
-                smallSwapVariableChar = pNumberOfCharRepetitions[i][LETTER_INDEX];
-                bigSwapVariableChar = pNumberOfCharRepetitions[i+1][LETTER_INDEX];
-                smallSwapVariableNum = pNumberOfCharRepetitions[i][REPETITION_INDEX];
-                bigSwapVariableNum = pNumberOfCharRepetitions[i+1][REPETITION_INDEX];
+    for (k = 0; k < lens; k++) {
+        for (i = 0; i < lens; i++) {
+            if (sortArray[i][REPETITION_INDEX] < sortArray[i+1][REPETITION_INDEX]) {
+                smallSwapVariableChar = sortArray[i][LETTER_INDEX];
+                bigSwapVariableChar = sortArray[i+1][LETTER_INDEX];
+                smallSwapVariableNum = sortArray[i][REPETITION_INDEX];
+                bigSwapVariableNum = sortArray[i+1][REPETITION_INDEX];
 
-                pNumberOfCharRepetitions[i][LETTER_INDEX] = bigSwapVariableChar;
-                pNumberOfCharRepetitions[i][REPETITION_INDEX] = bigSwapVariableNum;
-                pNumberOfCharRepetitions[i+1][LETTER_INDEX] = smallSwapVariableChar;
-                pNumberOfCharRepetitions[i+1][REPETITION_INDEX] = smallSwapVariableNum;
+                sortArray[i][LETTER_INDEX] = bigSwapVariableChar;
+                sortArray[i][REPETITION_INDEX] = bigSwapVariableNum;
+                sortArray[i+1][LETTER_INDEX] = smallSwapVariableChar;
+                sortArray[i+1][REPETITION_INDEX] = smallSwapVariableNum;
             }
         }
     }
 
-    /* --- Print numberOfCharRepetitions array --- */
-    for (i = 0; i < NUM_CHAR_INTO_ALPHABET; i++) {
-            if (pNumberOfCharRepetitions[i][LETTER_INDEX] != NULL){
-                printf("\n %c", pNumberOfCharRepetitions[i][LETTER_INDEX]);
-                printf(" - %d", pNumberOfCharRepetitions[i][REPETITION_INDEX]);
-            }
-    }
+}
 
-    for (i = 0; i < NUM_CHAR_INTO_ALPHABET; i++) {
-        free(pNumberOfCharRepetitions[i]);
+void printRez (char** printArray, int lens) {
+    int i = 0;
+
+    for (i = 0; i < lens; i++) {
+        if (printArray[i][LETTER_INDEX] != NULL){
+            printf("\n %c", printArray[i][LETTER_INDEX]);
+            printf(" - %d", printArray[i][REPETITION_INDEX]);
+        }
     }
-    free(pNumberOfCharRepetitions);
+}
+
+void freeMem (char** freeArray, int lens) {
+    int i = 0;
+    for (i = 0; i < lens; i++) {
+        free(freeArray[i]);
+    }
+    free(freeArray);
+}
+
+int main(){
+
+    char* userString = (char*)malloc(MAX_LENS_USERSTRING * sizeof(char)); // Create memory for userString[i]
+
+    /* --- Fill userString array "0" elements --- */
+    fillArray (userString, MAX_LENS_USERSTRING, 0);
+
+    /* --- Create memory for numberOfCharRepetitions[i][k] --- */
+    char** numberOfCharRepetitions = multidimensionalArray(MAX_LENS_USERSTRING, NUMBEROFCHARREPETITIONS_SECOND_INDEX);
+
+    /* --- Fill numberOfCharRepetitions array "0" elements --- */
+    fillMulDimArray (numberOfCharRepetitions, MAX_LENS_USERSTRING, NUMBEROFCHARREPETITIONS_SECOND_INDEX, 0);
+
+    /* --- Assign array for conversion capital letter to lowercase letter --- */
+    char capitalToLowercase[NUM_CHAR_INTO_ALPHABET][LETTERSARRAY_SECOND_INDEX];
+    capitalAndLowercaseLetterArray(LETTERSARRAY_SECOND_INDEX, capitalToLowercase, NUM_CHAR_INTO_ALPHABET);
+
+    printf("Enter some string: ");
+    fgets(userString, MAX_LENS_USERSTRING, stdin);
+
+    /* --- Conversion capital letter to lowercase letter --- */
+    conversionCapToLow(userString, LETTERSARRAY_SECOND_INDEX, capitalToLowercase, MAX_LENS_USERSTRING, NUM_CHAR_INTO_ALPHABET);
+
+    /* --- Assign letter from usersString to numberOfCharRepetitions and calculate repetitions --- */
+    calcRepetition(userString, numberOfCharRepetitions, MAX_LENS_USERSTRING);
+
+    /* --- Sort numberOfCharRepetitions array --- */
+    sortLetters (numberOfCharRepetitions, NUM_CHAR_INTO_ALPHABET);
+
+    /* --- Print numberOfCharRepetitions array --- */
+    printRez(numberOfCharRepetitions, NUM_CHAR_INTO_ALPHABET);
+
+    /* --- Free numberOfCharRepetitions array memory --- */
+    freeMem(numberOfCharRepetitions, NUM_CHAR_INTO_ALPHABET);
 
     return 0;
 }
