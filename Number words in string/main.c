@@ -41,7 +41,7 @@ int numWord(int *indexArr, int lens, int defaultValue) {
 
 int main(){
 
-    const int MAX_LENS_OF_STRING = 100000;
+    const int MAX_LENS_OF_STRING = 1000000;
     const int DEFAULT_USER_ARRAY_VALUE = 0;
     const int DEFAULT_INDEX_ARRAY_VALUE = -1;
 
