@@ -28,8 +28,8 @@ char **multidimensionalArray (int row, int column) {
 }
 
 /* --- Constants --- */
-const int MAX_LENS_USERSTRING = 100000;
-const int NUM_CHAR_INTO_ALPHABET = 27;
+const int MAX_LENS_USERSTRING = 1000000;
+const int NUM_CHAR_INTO_ALPHABET = 26;
 
 const int START_CAPITAL_LETTER_ASCII = 65;
 const int START_LOWERCASE_LETTER_ASCII = 97;
