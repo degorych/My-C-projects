@@ -4,7 +4,6 @@
 #define DECIPHER_VALUE 2
 
 /* --- Fill userString array --- */
-
 void fillArray (char* array, int lensArray) {
     int i = 0;
     for (i = 0; i < lensArray; i++) {
@@ -13,7 +12,6 @@ void fillArray (char* array, int lensArray) {
 }
 
 /* --- Select key number or selector --- */
-
 int enterDataAndNumberCheckingFunction (char *description, int enterNumber) {
     printf("%s", description);
     int checkEnterUserDataVar = scanf("%d", &enterNumber);
@@ -26,14 +24,12 @@ int enterDataAndNumberCheckingFunction (char *description, int enterNumber) {
 }
 
 /* --- Enter user data --- */
-
 void userDataString (char* userData, int lensData) {
-    printf("\nEnter string for encrypt: ");
+    printf("\nEnter string: ");
     fgets(userData, lensData, stdin);
 }
 
 /* --- Check and loop key number --- */
-
 int deleteLoopKeyNumber (int keyNum, int keyMaxValue) {
     if (keyNum > keyMaxValue) {
         keyNum = keyNum % keyMaxValue;
@@ -46,18 +42,14 @@ int deleteLoopKeyNumber (int keyNum, int keyMaxValue) {
 }
 
 /* --- Encrypt or decipher user data and view result --- */
-
 void encryptOrDecipher (char* userData, int keyNum, int encryptAndDecipher) {
     int i = 0;
-
-
 
     const int NUMBER_LETTERS_IN_ALPHABET = 26;
     const char END_CAPITAL_LETTER_IN_ALPHABET = 'Z';
     const char END_LOWERCASE_LETTER_IN_ALPHABET = 'z';
     const char START_LOWERCASE_LETTER_IN_ALPHABET = 'a';
     const char START_CAPITAL_LETTER_IN_ALPHABET = 'A';
-
 
     printf("\nResult is: ");
     for (i = 0; i < strlen(userData); i++) {
@@ -81,7 +73,6 @@ void encryptOrDecipher (char* userData, int keyNum, int encryptAndDecipher) {
                     userData[i] = userData[i] - keyNum;
                     printf("%c", userData[i]);
                 }
-
         }
         else if (userData[i] == ' ') {
             printf("%c", userData[i]);
@@ -90,7 +81,6 @@ void encryptOrDecipher (char* userData, int keyNum, int encryptAndDecipher) {
 }
 
 void encryptAndDecipherFullFunction (void (*enterUserData)(char*, int), int (*keyNumberSelectionsFunc)(char*, int), int (*checkAndLoopKeyNumFunc)(int, int), void (*encryptOrDecipherUserData)(char*, int, int), char* userStr, int keyStr, int keyNum, int choiceSel, int lens, int letternum) {
-
     enterUserData (userStr, lens); // Enter user data
     keyNum = keyNumberSelectionsFunc (keyStr, keyNum); // Select key number
     int keyNumUnloop = checkAndLoopKeyNumFunc (keyNum, letternum); // Check and loop key number
@@ -106,8 +96,6 @@ int main() {
 
     char* selectionMenuString = {"What do you want to do?\n\nSelect 1 for encrypt\nSelect 2 for decipher\n\nYour answer is: "};
     char* keyString = {"Enter key number: "};
-    char* encryptString = {"Your encrypt string is: "};
-    char* decipherString = {"Your decipher string is: "};
 
     char userString[MAX_USER_STRING_LENS];
     fillArray(userString, MAX_USER_STRING_LENS); // Fill userString array
