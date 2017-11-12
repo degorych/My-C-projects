@@ -41,7 +41,7 @@ void fillUserKeyWord (char* description, char* inputUserData) {
     getchar ();
 }
 
-/* --- Fill keyWordString keyWord letters --- */
+/* --- Fill keyWordString keyWord letters and transform their for shift--- */
 void fillKeyWordString (char* keyWordStr, char* inputUserData, char* keyWord) {
     int lensInputUserData = strlen(inputUserData);
     int lensKeyWord = strlen(keyWord);
@@ -105,7 +105,7 @@ void decipherUserString (char* inputUserString, char* keyWordString) {
 
 /* --- This function unit all functions for encrypting or decipher --- */
 void allInOneFunction (void fillInputUserArray (char*, int), void fillUserKeyWord (char*, char*), void fillKeyWordString (char*, char*, char*), void encryptOrDecipherUserString (char*, char*), char* userString, int userStringLens, char* keyWordDescription, char* keyWord, char* keyWordString) {
-    fillInputUserArray (userString, userStringLens); // Fill userString array user data
+    fillInputUserArray (userString, userStringLens); // Fill userString array of user data
     fillUserKeyWord (keyWordDescription, keyWord); // Fill keyword
     fillKeyWordString (keyWordString, userString, keyWord); // Fill keyword string
     encryptOrDecipherUserString (userString, keyWordString); // Encrypt or decipher and show user string
