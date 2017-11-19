@@ -132,12 +132,7 @@ public:
 
         for (i = 0; i < MAX_ANIMAL_NUMBER; i++) {
             if (name == obj[i].name) {
-                obj[i].age = 0;
-                obj[i].kind = "0";
-                obj[i].name = "0";
-                obj[i].pawsNum = 0;
-                obj[i].health = 0;
-                obj[i].isShow = 0;
+                obj[i].setValue(0, "0", "0", 0, 0, 0);
                 break;
             }
         }
