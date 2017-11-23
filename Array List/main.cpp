@@ -43,7 +43,7 @@ public:
         return newElement;
     }
 
-    /* --- Add new element to array end if have enough place --- */
+    /* --- Add new element to free place or array end, if have enough place --- */
     void goodAddNewElement(int newElement) {
         int i;
         for (i = 0; i < allocationSize; i++) {
@@ -56,7 +56,7 @@ public:
     }
 
     /* --- Create new array, which more then used by a factor of allocationSizeFactor --- */
-    void badAddNewElement(int allocationSizeFactor) {
+    void createNewArray(int allocationSizeFactor) {
         int i;
         int* newArray = new int[allocationSizeFactor*allocationSize];
         fillArray(newArray, allocationSizeFactor*allocationSize);
@@ -76,7 +76,7 @@ public:
             goodAddNewElement(newElement);
         }
         else {
-            badAddNewElement(2);
+            createNewArray(2);
             goodAddNewElement(newElement);
         }
     }
@@ -126,7 +126,7 @@ public:
             arrayCol[index] = newElement;
         }
         else if (arrayCol[allocationSize-1] != NULL) {
-            badAddNewElement(2);
+            createNewArray(2);
             loopForShift(newElement, index);
         }
         else if (arrayCol[allocationSize-1] == NULL) {
@@ -151,7 +151,7 @@ public:
         while (arrayCol[allocationSize-1] == NULL) {
             allocationSize--;
         }
-        badAddNewElement(1);
+        createNewArray(1);
     }
 
     /* --- Delete element with user index and shift another elements after index to right --- */
@@ -175,22 +175,26 @@ int main(){
     ArrayCollection* obj_ArrayCollection = new ArrayCollection;
 
     /* --- Make 3 add number in array end and show result --- */
+    cout << "\n / --- Add 3 number to array end. --- /" << endl;
     for (i = 0; i < 3; i++) {
         obj_ArrayCollection->addNewElement();
+        obj_ArrayCollection->showElements();
     }
-    obj_ArrayCollection->showElements();
 
     /* --- Make 3 add number with users index in array and show result --- */
+    cout << "\n / --- Add 3 number with index. --- /" << endl;
     for (i = 0; i < 3; i++) {
         obj_ArrayCollection->addNewElementIndex();
         obj_ArrayCollection->showElements();
     }
 
     /* --- Delete NULL elements in array and show result --- */
+    cout << "\n Optimization array: ";
     obj_ArrayCollection->optimalArraySize();
     obj_ArrayCollection->showElements();
 
     /* --- Delete element with user index in array and show result --- */
+    cout << "\n / --- Delete element. --- /" << endl;
     obj_ArrayCollection->deleteElement();
     obj_ArrayCollection->showElements();
 
