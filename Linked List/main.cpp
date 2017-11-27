@@ -10,24 +10,52 @@ private:
     Node* next;
 
 public:
+    /* --- SET --- */
+    void setNumber(int number) {
+        this->number = number;
+    }
+    void setPrevious(Node* previous) {
+        this->previous = previous;
+    }
+    void setNext(Node* next) {
+        this->next = next;
+    }
+    void setValues(int number, Node* previous, Node* next) {
+        setNumber(number);
+        setPrevious(previous);
+        setNext(next);
+    }
+
+    /* --- GET --- */
+    int getNumber() {
+        return number;
+    }
+    Node* getPrevious() {
+        return previous;
+    }
+    Node* getNext() {
+        return next;
+    }
+};
+
+class LinkedList {
+public:
+
     /* --- Create first node --- */
-    void firstNode (int n, Node* firstNode) {
-        firstNode->number = n;
-        firstNode->next = NULL;
-        firstNode->previous = NULL;
+    void firstNode (int number, Node* firstNode) {
+        firstNode->setValues(number, NULL, NULL);
     }
 
     /* --- Add new node to end --- */
     void addNode(int addNumber, Node* newNode) {
-        if (newNode->next == NULL) {
+        if (newNode->getNext() == NULL) {
             Node* temp = new Node;
-            temp->number = addNumber;
-            temp->next = NULL;
-            temp->previous = newNode;
-            newNode->next = temp;
+
+            temp->setValues(addNumber, newNode, NULL);
+            newNode->setNext(temp);
         }
         else {
-            newNode = newNode->next;
+            newNode = newNode->getNext();
             addNode(addNumber, newNode);
         }
     }
@@ -41,17 +69,14 @@ public:
         if (checkIndexInShow == 1) {
             for (i = 0; i <= index; i++) {
                 currentNode = newNode;
-                previousNode = newNode->previous;
-                newNode = newNode->next;
+                previousNode = newNode->getPrevious();
+                newNode = newNode->getNext();
             }
             Node* temp = new Node;
-            temp->number = addNumber;
-            temp->previous = previousNode;
-            temp->next = currentNode;
-
-            currentNode->previous = temp;
+            temp->setValues(addNumber, previousNode, currentNode);
+            currentNode->setPrevious(temp);
             if (previousNode != NULL) {
-                previousNode->next = temp;
+                previousNode->setNext(temp);
             }
         }
     }
@@ -64,12 +89,12 @@ public:
         Node* currentNode;
         if (checkIndexInShow == 1) {
             for (i = 0; i <= index; i++) {
-                previousNode = delNode->previous;
+                previousNode = delNode->getPrevious();
                 currentNode = delNode;
-                delNode = delNode->next;
+                delNode = delNode->getNext();
             }
-            previousNode->next = delNode;
-            delNode->previous = previousNode;
+            previousNode->setNext(delNode);
+            delNode->setPrevious(previousNode);
             delete currentNode;
         }
     }
@@ -78,8 +103,8 @@ public:
     void show (Node* obj) {
         Node* nodeList = obj;
         while(nodeList) {
-		cout << nodeList->number << " ";
-		nodeList = nodeList->next;
+		cout << nodeList->getNumber() << " ";
+		nodeList = nodeList->getNext();
         }
         cout << endl;
     }
@@ -92,9 +117,9 @@ public:
         if (checkIndexInShow == 1) {
             for (i = 0; i <= index; i++) {
                 currentNode = obj;
-                obj = obj->next;
+                obj = obj->getNext();
             }
-            cout << index << " node is " << currentNode->number << endl;
+            cout << index << " node is " << currentNode->getNumber() << endl;
         }
     }
 
@@ -103,7 +128,7 @@ public:
         Node* nodeList = obj;
         int nodesNumber = 0;
         while(nodeList) {
-		nodeList = nodeList->next;
+		nodeList = nodeList->getNext();
 		nodesNumber++;
         }
         return nodesNumber;
@@ -124,34 +149,47 @@ public:
             return 1;
         }
     }
+
+    /* --- Clean memory --- */
+    void cleanMenory(Node* obj) {
+        Node* deleteObjects = obj;
+        while(deleteObjects) {
+		delete deleteObjects->getPrevious();
+		deleteObjects = deleteObjects->getNext();
+        }
+    }
 };
 
 int main() {
+    LinkedList* objLinList = new LinkedList;
     Node* obj = new Node;
 
     cout << "\n------------------- Add new nodes --------------------" << endl;
-    obj->firstNode(10, obj);
-    obj->addNode(20, obj);
-    obj->addNode(30, obj);
-    obj->addNode(40, obj);
-    obj->addNode(50, obj);
-    obj->addNode(60, obj);
-    obj->show(obj);
+    objLinList->firstNode(10, obj);
+    objLinList->addNode(20, obj);
+    objLinList->addNode(30, obj);
+    objLinList->addNode(40, obj);
+    objLinList->addNode(50, obj);
+    objLinList->addNode(60, obj);
+    objLinList->show(obj);
     cout << "------------------------------------------------------\n" << endl;
 
     cout << "\n-------------- Add new node to 2 index ---------------" << endl;
-    obj->addNodeToIndex(55, 2, obj);
-    obj->show(obj);
+    objLinList->addNodeToIndex(55, 2, obj);
+    objLinList->show(obj);
     cout << "------------------------------------------------------\n" << endl;
 
     cout << "\n--------------- Delete node to 4 index ---------------" << endl;
-    obj->deleteNodeToIndex(4, obj);
-    obj->show(obj);
+    objLinList->deleteNodeToIndex(4, obj);
+    objLinList->show(obj);
     cout << "------------------------------------------------------\n" << endl;
 
     cout << "\n------------ Show node value to 2 index --------------" << endl;
-    obj->showToIndex(2, obj);
+    objLinList->showToIndex(2, obj);
     cout << "------------------------------------------------------\n" << endl;
+
+    objLinList->cleanMenory(obj);
+    delete objLinList;
 
     return 0;
 }
