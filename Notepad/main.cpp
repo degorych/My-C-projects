@@ -2,50 +2,80 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
+#include <limits>
 
 #define ARRAY_SIZE 50
 
-#define ADD_NEW_NOTE 1
-#define DELETE_NOTE 2
-#define EDIT_NOTE 3
-#define SHOW_ALL_NOTES 4
-#define EXIT_PROGRAM 5
+/* --- Menu (ASCII) --- */
+#define ADD_NEW_NOTE 49
+#define DELETE_NOTE 50
+#define EDIT_NOTE 51
+#define SHOW_ALL_NOTES 52
+#define EXIT_PROGRAM 53
+
+/* --- Text constructor --- */
+#define SHOW_USER_MENU 0
+#define ENTER_NOTE 1
+#define SELECT_POSITION 2
+#define ENTER_EDITED_NOTE 3
+#define ENTER_ANSWER 4
+
+/* --- Error constructor --- */
+#define INCORRECT_ANSWER 0
+#define INCORRECT_POSITION 1
+#define LONG_NOTE_ERROR 2
 
 using namespace std;
 
 /* --- Manager information for user --- */
 class UserInfoViewer {
+private:
+    char userText[5][120] = {"\nSelect 1 to add new note\nSelect 2 to delete note\nSelect 3 to edit note\nSelect 4 to show all note\nSelect 5 to exit\n\n",
+                             "Enter your note: ",
+                             "Select note position: ",
+                             "Enter edited note: ",
+                             "Enter answer: "};
+    char userErrorMessage[3][61] = {"\nYour answer is incorrect",
+                                    "\nIncorrect position",
+                                    "\nWarning! Your note is very long, some info can not be save"};
+
 public:
-    void showUserMenu() {
-        cout << "Select 1 to add new note\nSelect 2 to delete note\nSelect 3 to edit note\nSelect 4 to show all note\nSelect 5 to exit\n" << endl;
+    void userTextConstructor(int index) {
+        int i;
+        for (i = 0; i < 120; i++) {
+            if (userText[index][i] != 0) {
+                cout << userText[index][i];
+            }
+        }
     }
 
-    void showUserAnswer() {
-        cout << "Your answer is - ";
+    void userErrorConstructor(int index) {
+        int i;
+        for (i = 0; i < 61; i++) {
+            if (userErrorMessage[index][i] != 0) {
+                cout << userErrorMessage[index][i];
+            }
+        }
+        cout << endl;
     }
 
-    void addNewNoteText() {
-        cout << "Enter your note: ";
-    }
-
-    void showIncorrectUserSelectError() {
-        cout << "Your answer is incorrect" << endl;
-    }
-
-    void showIncorrectUserIndexError() {
-        cout << "Incorrect position" << endl;
-    }
-
-    void editNoteSelectPositionText() {
-        cout << "Select note position: ";
-    }
-
-    void editNoteText() {
-        cout << "Enter edited note: ";
-    }
-
-    void noteOverflow() {
-        cout << "Warning! Your note is very long, some info can not be save";
+    void showUserNotes(int counter, FILE* file) {
+        int i, j;
+        char note[ARRAY_SIZE] = {0};
+        cout << endl;
+        for (i = 1; i <= counter; i++) {
+            fread(note, sizeof(char), ARRAY_SIZE, file);
+            cout << i << ". ";
+            for (j = 0; j < ARRAY_SIZE; j++) {
+                if (note[j] != 0) {
+                    cout << note[j];
+                }
+                else {
+                    break;
+                }
+            }
+            cout << endl;
+        }
     }
 };
 
@@ -53,10 +83,15 @@ public:
 class ManagerNotepad {
 private:
     char note[ARRAY_SIZE];
+    UserInfoViewer* objUserInfoViewer = new UserInfoViewer;
 
 public:
     ManagerNotepad() {
         fillArray(note, ARRAY_SIZE);
+    }
+
+    ~ManagerNotepad() {
+        delete objUserInfoViewer;
     }
 
     void fillArray(char* userArray, int sizeArray) {
@@ -80,7 +115,14 @@ public:
     }
 
     void fillNoteFromConsol() {
-        cin.getline(note, ARRAY_SIZE-1);
+        cin.getline(note, ARRAY_SIZE);
+
+        if (note[ARRAY_SIZE-2] != 0) {
+            objUserInfoViewer->userErrorConstructor(2);
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+
         note[ARRAY_SIZE-1] = '|';
     }
 
@@ -148,26 +190,16 @@ public:
         FILE* file;
         file = fopen("notepad.txt", "r");
 
-        for (i = 1; i <= userNotesCounter; i++) {
-            fread(note, sizeof(char), ARRAY_SIZE, file);
-            cout << i << ". ";
-            for (j = 0; j < ARRAY_SIZE; j++) {
-                if (note[j] != 0) {
-                    cout << note[j];
-                }
-            }
-            cout << endl;
-        }
+        objUserInfoViewer->showUserNotes(userNotesCounter, file);
 
         fclose(file);
-        fillArray(note, ARRAY_SIZE);
     }
 };
 
 /* --- Manager menu, user selector, user index --- */
 class ManagerMenu {
 private:
-    int userSelector;
+    char userSelector;
     int userIndex;
 
     UserInfoViewer* objUserInfoViewer = new UserInfoViewer;
@@ -185,60 +217,64 @@ public:
     }
 
     void setUserAnswer() {
-        objUserInfoViewer->showUserAnswer();
+        objUserInfoViewer->userTextConstructor(ENTER_ANSWER);
         cin >> userSelector;
         cin.get();
     }
 
     void setUserIndex() {
-        objUserInfoViewer->editNoteSelectPositionText();
+        objUserInfoViewer->userTextConstructor(SELECT_POSITION);
         cin >> userIndex;
         cin.get();
     }
 
     bool checkUserIndex() {
-        if (userIndex < 1 || userIndex >= objManagerNotepad->notesCounter()) {
-            objUserInfoViewer->showIncorrectUserIndexError();
-            return false;
+        setUserIndex();
+
+        if (userIndex < 1 || userIndex > objManagerNotepad->notesCounter()) {
+            objUserInfoViewer->userErrorConstructor(INCORRECT_POSITION);
+            return 0;
         }
+        return 1;
     }
 
     void userMenu() {
         for (;;) {
-            objUserInfoViewer->showUserMenu();
+            objUserInfoViewer->userTextConstructor(SHOW_USER_MENU);
             setUserAnswer();
 
             switch (userSelector) {
             case ADD_NEW_NOTE:
-                objUserInfoViewer->addNewNoteText();
+                objUserInfoViewer->userTextConstructor(ENTER_NOTE);
                 objManagerNotepad->addNewNote();
                 break;
-            case DELETE_NOTE:
-                setUserIndex();
 
+            case DELETE_NOTE:
                 if (!checkUserIndex()) {
                     break;
                 }
 
                 objManagerNotepad->deleteNote(userIndex);
                 break;
-            case EDIT_NOTE:
-                setUserIndex();
 
+            case EDIT_NOTE:
                 if (!checkUserIndex()) {
                     break;
                 }
 
-                objUserInfoViewer->editNoteText();
+                objUserInfoViewer->userTextConstructor(ENTER_EDITED_NOTE);
                 objManagerNotepad->editNote(userIndex);
                 break;
+
             case SHOW_ALL_NOTES:
                 objManagerNotepad->showNotes();
                 break;
+
             case EXIT_PROGRAM:
-                exit(0);
+                return;
+
             default:
-                objUserInfoViewer->showIncorrectUserSelectError();
+                objUserInfoViewer->userErrorConstructor(INCORRECT_ANSWER);
                 break;
             }
         }
